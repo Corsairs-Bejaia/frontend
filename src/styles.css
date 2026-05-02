@@ -51,9 +51,9 @@
   --color-ring: var(--ring);
   --color-ring-offset-background: var(--background);
 
-  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --font-display: "IBM Plex Serif", ui-serif, Georgia, serif;
+  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
 
   --shadow-glow: 0 0 0 1px color-mix(in oklab, var(--primary) 30%, transparent),
                  0 8px 32px -8px color-mix(in oklab, var(--primary) 40%, transparent);
@@ -63,8 +63,64 @@
 
 :root {
   --radius: 0.75rem;
+  color-scheme: light;
 
-  /* Dark command-center theme — used as the default. */
+  /* Light mode (white mode). */
+  --background: oklch(0.98 0.004 250);
+  --foreground: oklch(0.20 0.03 250);
+  --surface: oklch(0.96 0.006 250);
+  --surface-elevated: oklch(0.99 0.004 250);
+
+  --card: oklch(0.985 0.004 250);
+  --card-foreground: oklch(0.20 0.03 250);
+  --popover: oklch(0.985 0.004 250);
+  --popover-foreground: oklch(0.20 0.03 250);
+
+  --primary: oklch(0.53 0.18 257);
+  --primary-foreground: oklch(0.99 0 0);
+  --primary-glow: oklch(0.62 0.18 250);
+
+  --secondary: oklch(0.93 0.01 250);
+  --secondary-foreground: oklch(0.28 0.02 250);
+
+  --muted: oklch(0.92 0.008 250);
+  --muted-foreground: oklch(0.50 0.02 250);
+
+  --accent: oklch(0.90 0.02 250);
+  --accent-foreground: oklch(0.25 0.02 250);
+
+  --success: oklch(0.57 0.15 155);
+  --success-foreground: oklch(0.99 0 0);
+  --warning: oklch(0.62 0.16 55);
+  --warning-foreground: oklch(0.20 0.02 250);
+  --destructive: oklch(0.58 0.21 25);
+  --destructive-foreground: oklch(0.99 0 0);
+
+  --border: oklch(0.88 0.01 250);
+  --border-strong: oklch(0.82 0.012 250);
+  --input: oklch(0.90 0.01 250);
+  --ring: oklch(0.53 0.18 257);
+
+  --chart-1: oklch(0.53 0.18 257);
+  --chart-2: oklch(0.57 0.15 155);
+  --chart-3: oklch(0.62 0.16 55);
+  --chart-4: oklch(0.58 0.21 25);
+  --chart-5: oklch(0.62 0.18 250);
+
+  --sidebar: oklch(0.97 0.006 250);
+  --sidebar-foreground: oklch(0.20 0.03 250);
+  --sidebar-primary: oklch(0.53 0.18 257);
+  --sidebar-primary-foreground: oklch(0.99 0 0);
+  --sidebar-accent: oklch(0.92 0.01 250);
+  --sidebar-accent-foreground: oklch(0.25 0.02 250);
+  --sidebar-border: oklch(0.86 0.01 250);
+  --sidebar-ring: oklch(0.53 0.18 257);
+}
+
+.dark {
+  color-scheme: dark;
+
+  /* Dark command-center theme (current design). */
   --background: oklch(0.16 0.02 250);
   --foreground: oklch(0.97 0.005 250);
   --surface: oklch(0.19 0.022 250);
@@ -116,10 +172,6 @@
   --sidebar-ring: oklch(0.58 0.17 257);
 }
 
-.dark {
-  /* same theme — app is dark by default. */
-}
-
 @layer base {
   * {
     border-color: var(--color-border);
@@ -135,9 +187,15 @@
 
   body {
     background-image:
+      radial-gradient(ellipse 80% 50% at 50% -10%, color-mix(in oklab, var(--primary) 8%, transparent), transparent 60%),
+      radial-gradient(ellipse 60% 40% at 90% 110%, color-mix(in oklab, var(--success) 6%, transparent), transparent 60%);
+    background-attachment: fixed;
+  }
+
+  .dark body {
+    background-image:
       radial-gradient(ellipse 80% 50% at 50% -10%, color-mix(in oklab, var(--primary) 18%, transparent), transparent 60%),
       radial-gradient(ellipse 60% 40% at 90% 110%, color-mix(in oklab, var(--success) 12%, transparent), transparent 60%);
-    background-attachment: fixed;
   }
 
   h1, h2, h3, h4 {
@@ -167,6 +225,31 @@
   }
   .glow-ring {
     box-shadow: var(--shadow-glow);
+  }
+  .card-3d {
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    box-shadow: var(--shadow-elevated);
+  }
+  .card-3d::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(135deg, color-mix(in oklab, var(--primary) 16%, transparent), transparent 55%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+  }
+  .card-3d:hover {
+    transform: perspective(900px) rotateX(6deg) rotateY(-6deg) translateY(-4px);
+  }
+  .card-3d:hover::before {
+    opacity: 1;
+  }
+  .card-3d-layer {
+    transform: translateZ(18px);
   }
 }
 

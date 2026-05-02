@@ -1,13 +1,15 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { ArrowDown, ArrowUp, ChevronRight, Eye } from "lucide-react";
+import { useState } from "react";
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip,
   ResponsiveContainer, PieChart, Pie, Cell,
 } from "recharts";
 import { AppShell } from "@/components/app-shell";
 import { StatusBadge, ScoreBar } from "@/components/status-badge";
-import { kpis, timeline, distribution, verifications } from "@/lib/mock-data";
+import { DoctorDetailModal } from "@/components/doctor-detail-modal";
+import { kpis, timeline, distribution, verifications, type Verification } from "@/lib/mock-data";
 
 export const Route = createFileRoute("/dashboard")({
   component: Dashboard,
@@ -15,14 +17,72 @@ export const Route = createFileRoute("/dashboard")({
 });
 
 function Dashboard() {
+  const approved = verifications.filter((v) => v.status === "approved");
+  const [selectedDoctor, setSelectedDoctor] = useState<Verification | null>(null);
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const openDoctorModal = (doctor: Verification) => {
+    setSelectedDoctor(doctor);
+    setModalOpen(true);
+  };
+
   return (
-    <AppShell title="Command center" subtitle="Real-time view of every verification flowing through your tenant">
+    <>
+      <AppShell title="Command center" subtitle="Real-time view of every verification flowing through your tenant">
       {/* KPI grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <KpiCard label="Total verifications" value={kpis.total.value.toLocaleString()} change={kpis.total.change} accent="primary" />
         <KpiCard label="Approval rate" value={`${kpis.approvalRate.value}%`} change={kpis.approvalRate.change} accent="success" ring={kpis.approvalRate.value} />
         <KpiCard label="Pending reviews" value={kpis.pendingReviews.value.toString()} change={kpis.pendingReviews.change} accent="warning" />
         <KpiCard label="Avg processing" value={`${kpis.avgTime.value} m`} change={kpis.avgTime.change} accent="primary" inverted />
+      </div>
+
+      {/* Approved doctors (3D cards) */}
+      <div className="mt-6">
+        <div className="flex items-center justify-between">
+          <PanelHeader title="Approved doctors" subtitle="Most recent approvals" />
+          <span className="text-xs text-muted-foreground font-mono">{approved.length} active</span>
+        </div>
+        <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+          {approved.map((v, i) => (
+            <motion.div
+              key={v.id}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.04 }}
+            >
+              <button
+                onClick={() => openDoctorModal(v)}
+                className="w-full group card-3d rounded-xl border border-border bg-surface p-4 text-left hover:border-border-strong transition-colors"
+              >
+                <div className="card-3d-layer">
+                  <div className="flex items-start gap-3">
+                    <div className="grid place-items-center h-10 w-10 rounded-lg bg-success/15 ring-1 ring-success/25 text-success font-display text-sm font-semibold">
+                      {v.doctorName.replace("Dr. ", "").split(" ").map((s) => s[0]).slice(0, 2).join("")}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium truncate">{v.doctorName}</p>
+                      <p className="text-xs text-muted-foreground">{v.specialty}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">Score</p>
+                      <p className="font-display text-lg font-semibold tabular-nums">{v.score}</p>
+                    </div>
+                  </div>
+                  <div className="mt-3 flex items-center justify-between text-xs text-muted-foreground">
+                    <span className="font-mono">{v.submittedAt}</span>
+                    <StatusBadge status={v.status} />
+                  </div>
+                  <div className="mt-3 pt-3 border-t border-border/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    <span className="inline-flex items-center gap-1.5 text-xs font-medium text-primary-glow">
+                      <Eye className="h-3.5 w-3.5" /> View details
+                    </span>
+                  </div>
+                </div>
+              </button>
+            </motion.div>
+          ))}
+        </div>
       </div>
 
       {/* Charts row */}
@@ -142,7 +202,10 @@ function Dashboard() {
           </table>
         </div>
       </Panel>
+
+      <DoctorDetailModal open={modalOpen} onOpenChange={setModalOpen} doctor={selectedDoctor} />
     </AppShell>
+    </>
   );
 }
 
@@ -161,7 +224,6 @@ function KpiCard({
       transition={{ duration: 0.4 }}
       className="relative rounded-xl border border-border bg-surface p-5 overflow-hidden"
     >
-      <div className="absolute inset-x-0 top-0 h-px" style={{ background: `linear-gradient(90deg, transparent, ${accentVar}, transparent)` }} />
       <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">{label}</p>
       <div className="mt-3 flex items-end justify-between gap-3">
         <p className="font-display text-3xl font-semibold tabular-nums">{value}</p>
