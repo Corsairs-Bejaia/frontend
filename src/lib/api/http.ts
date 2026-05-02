@@ -10,6 +10,7 @@ export class HttpError extends Error {
 }
 
 const DEFAULT_TIMEOUT = 10000
+const API_TOKEN = import.meta.env.VITE_API_TOKEN
 
 export async function http<T>(
   url: string,
@@ -20,15 +21,19 @@ export async function http<T>(
   const timeout = setTimeout(() => controller.abort(), DEFAULT_TIMEOUT)
 
   try {
+    const headers: HeadersInit = {
+      "Content-Type": "application/json",
+      ...options.headers,
+    }
+
+    if (API_TOKEN) {
+      headers["Authorization"] = `Bearer ${API_TOKEN}`
+    }
 
     const res = await fetch(url, {
       ...options,
-      credentials: "include",
       signal: controller.signal,
-      headers: {
-        "Content-Type": "application/json",
-        ...options.headers,
-      },
+      headers,
     })
 
     if (!res.ok) {
