@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as VerificationsIndexRouteImport } from './routes/verifications.index'
+import { Route as VerifyTokenRouteImport } from './routes/verify.$token'
 import { Route as VerificationsIdRouteImport } from './routes/verifications.$id'
 
 const DashboardRoute = DashboardRouteImport.update({
@@ -29,6 +30,11 @@ const VerificationsIndexRoute = VerificationsIndexRouteImport.update({
   path: '/verifications/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const VerifyTokenRoute = VerifyTokenRouteImport.update({
+  id: '/verify/$token',
+  path: '/verify/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const VerificationsIdRoute = VerificationsIdRouteImport.update({
   id: '/verifications/$id',
   path: '/verifications/$id',
@@ -39,12 +45,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/verifications/$id': typeof VerificationsIdRoute
+  '/verify/$token': typeof VerifyTokenRoute
   '/verifications/': typeof VerificationsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/verifications/$id': typeof VerificationsIdRoute
+  '/verify/$token': typeof VerifyTokenRoute
   '/verifications': typeof VerificationsIndexRoute
 }
 export interface FileRoutesById {
@@ -52,20 +60,38 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/verifications/$id': typeof VerificationsIdRoute
+  '/verify/$token': typeof VerifyTokenRoute
   '/verifications/': typeof VerificationsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/dashboard' | '/verifications/$id' | '/verifications/'
+  fullPaths:
+    | '/'
+    | '/dashboard'
+    | '/verifications/$id'
+    | '/verify/$token'
+    | '/verifications/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dashboard' | '/verifications/$id' | '/verifications'
-  id: '__root__' | '/' | '/dashboard' | '/verifications/$id' | '/verifications/'
+  to:
+    | '/'
+    | '/dashboard'
+    | '/verifications/$id'
+    | '/verify/$token'
+    | '/verifications'
+  id:
+    | '__root__'
+    | '/'
+    | '/dashboard'
+    | '/verifications/$id'
+    | '/verify/$token'
+    | '/verifications/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardRoute: typeof DashboardRoute
   VerificationsIdRoute: typeof VerificationsIdRoute
+  VerifyTokenRoute: typeof VerifyTokenRoute
   VerificationsIndexRoute: typeof VerificationsIndexRoute
 }
 
@@ -92,6 +118,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof VerificationsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/verify/$token': {
+      id: '/verify/$token'
+      path: '/verify/$token'
+      fullPath: '/verify/$token'
+      preLoaderRoute: typeof VerifyTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/verifications/$id': {
       id: '/verifications/$id'
       path: '/verifications/$id'
@@ -106,6 +139,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRoute: DashboardRoute,
   VerificationsIdRoute: VerificationsIdRoute,
+  VerifyTokenRoute: VerifyTokenRoute,
   VerificationsIndexRoute: VerificationsIndexRoute,
 }
 export const routeTree = rootRouteImport
