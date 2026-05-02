@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { ArrowDown, ArrowUp, ChevronRight, Eye } from "lucide-react";
+import { ArrowDown, ArrowUp, ChevronRight, Eye, Plus } from "lucide-react";
 import { useState } from "react";
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip,
@@ -9,6 +9,9 @@ import {
 import { AppShell } from "@/components/app-shell";
 import { StatusBadge, ScoreBar } from "@/components/status-badge";
 import { DoctorDetailModal } from "@/components/doctor-detail-modal";
+import { ApiKeyFormModal } from "@/components/api-keys-form";
+import { ApiKeysTable } from "@/components/api-keys-table";
+import { Button } from "@/components/ui/button";
 import { kpis, timeline, distribution, verifications, type Verification } from "@/lib/mock-data";
 
 export const Route = createFileRoute("/dashboard")({
@@ -20,10 +23,17 @@ function Dashboard() {
   const approved = verifications.filter((v) => v.status === "approved");
   const [selectedDoctor, setSelectedDoctor] = useState<Verification | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
+  const [formModalOpen, setFormModalOpen] = useState(false);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   const openDoctorModal = (doctor: Verification) => {
     setSelectedDoctor(doctor);
     setModalOpen(true);
+  };
+
+  const handleApiKeySuccess = () => {
+    setFormModalOpen(false);
+    setRefreshTrigger((prev) => prev + 1);
   };
 
   return (
@@ -148,6 +158,24 @@ function Dashboard() {
         </Panel>
       </div>
 
+      {/* API Keys */}
+      <Panel className="mt-6">
+        <div className="flex items-center justify-between p-5 pb-3">
+          <PanelHeader title="API Keys" subtitle="Manage your API keys" />
+          <Button
+            size="sm"
+            onClick={() => setFormModalOpen(true)}
+            className="inline-flex items-center gap-2"
+          >
+            <Plus className="h-4 w-4" />
+            Add Key
+          </Button>
+        </div>
+        <div className="px-5 pb-5">
+          <ApiKeysTable refreshTrigger={refreshTrigger} />
+        </div>
+      </Panel>
+
       {/* Recent table */}
       <Panel className="mt-6">
         <div className="flex items-center justify-between p-5 pb-3">
@@ -204,6 +232,11 @@ function Dashboard() {
       </Panel>
 
       <DoctorDetailModal open={modalOpen} onOpenChange={setModalOpen} doctor={selectedDoctor} />
+      <ApiKeyFormModal
+        open={formModalOpen}
+        onOpenChange={setFormModalOpen}
+        onSuccess={handleApiKeySuccess}
+      />
     </AppShell>
     </>
   );
