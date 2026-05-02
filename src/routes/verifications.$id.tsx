@@ -17,7 +17,7 @@ export const Route = createFileRoute("/verifications/$id")({
     return { detail };
   },
   head: ({ loaderData }) => ({
-    meta: [{ title: `${loaderData?.detail.ref ?? "Verification"} — MediVerify` }],
+    meta: [{ title: `${(loaderData as { detail?: TVerificationDetail } | undefined)?.detail?.ref ?? "Verification"} — MediVerify` }],
   }),
   errorComponent: ({ error }) => (
     <AppShell title="Verification">
