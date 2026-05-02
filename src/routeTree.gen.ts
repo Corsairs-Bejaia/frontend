@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as VerificationsIndexRouteImport } from './routes/verifications.index'
+import { Route as VerificationsIdRouteImport } from './routes/verifications.$id'
 
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
@@ -28,34 +29,43 @@ const VerificationsIndexRoute = VerificationsIndexRouteImport.update({
   path: '/verifications/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const VerificationsIdRoute = VerificationsIdRouteImport.update({
+  id: '/verifications/$id',
+  path: '/verifications/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
+  '/verifications/$id': typeof VerificationsIdRoute
   '/verifications/': typeof VerificationsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
+  '/verifications/$id': typeof VerificationsIdRoute
   '/verifications': typeof VerificationsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
+  '/verifications/$id': typeof VerificationsIdRoute
   '/verifications/': typeof VerificationsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/dashboard' | '/verifications/'
+  fullPaths: '/' | '/dashboard' | '/verifications/$id' | '/verifications/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dashboard' | '/verifications'
-  id: '__root__' | '/' | '/dashboard' | '/verifications/'
+  to: '/' | '/dashboard' | '/verifications/$id' | '/verifications'
+  id: '__root__' | '/' | '/dashboard' | '/verifications/$id' | '/verifications/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardRoute: typeof DashboardRoute
+  VerificationsIdRoute: typeof VerificationsIdRoute
   VerificationsIndexRoute: typeof VerificationsIndexRoute
 }
 
@@ -82,12 +92,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof VerificationsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/verifications/$id': {
+      id: '/verifications/$id'
+      path: '/verifications/$id'
+      fullPath: '/verifications/$id'
+      preLoaderRoute: typeof VerificationsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRoute: DashboardRoute,
+  VerificationsIdRoute: VerificationsIdRoute,
   VerificationsIndexRoute: VerificationsIndexRoute,
 }
 export const routeTree = rootRouteImport

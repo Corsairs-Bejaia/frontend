@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
 import { StatusBadge } from "@/components/status-badge";
-import { getVerificationDetail } from "@/lib/mock-data";
+import { getVerificationDetail, type VerificationDetail as TVerificationDetail } from "@/lib/mock-data";
 
 export const Route = createFileRoute("/verifications/$id")({
   component: VerificationDetail,
@@ -34,7 +34,8 @@ export const Route = createFileRoute("/verifications/$id")({
 });
 
 function VerificationDetail() {
-  const { detail } = Route.useLoaderData();
+  const data = Route.useLoaderData() as { detail: TVerificationDetail };
+  const { detail } = data;
   const [openDoc, setOpenDoc] = useState<string | null>(detail.extracted[0]?.documentLabel ?? null);
   const [showTrace, setShowTrace] = useState(true);
 
