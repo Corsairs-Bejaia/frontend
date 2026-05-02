@@ -40,12 +40,13 @@ export interface CreateApiKeyPayload {
   rateLimit: number
 }
 
-const BASE_URL = `https://mediverify.up.railway.app/api/api-keys`
+const BASE_URL = `${import.meta.env.VITE_BACKEND_URL}`;
+const buildUrl = (path: string) => `${BASE_URL}${path}`;
 
 export async function createApiKey(
   payload: CreateApiKeyPayload
 ): Promise<CreateApiKeyResponse> {
-  return http<CreateApiKeyResponse>(BASE_URL, {
+  return http<CreateApiKeyResponse>(buildUrl("/api/api-keys"), {
     
     method: "POST",
     body: JSON.stringify(payload),
@@ -53,13 +54,13 @@ export async function createApiKey(
 }
 
 export async function listApiKeys(): Promise<ListApiKeysResponse> {
-  return http<ListApiKeysResponse>(BASE_URL, {
+  return http<ListApiKeysResponse>(buildUrl("/api/api-keys"), {
     method: "GET",
   })
 }
 
 export async function deleteApiKey(id: string): Promise<DeleteApiKeyResponse> {
-  return http<DeleteApiKeyResponse>(`${BASE_URL}/${id}`, {
+  return http<DeleteApiKeyResponse>(buildUrl(`/api/api-keys/${id}`), {
     method: "DELETE",
   })
 }
