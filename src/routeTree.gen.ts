@@ -9,38 +9,101 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as VerificationsIndexRouteImport } from './routes/verifications.index'
+import { Route as VerifyTokenRouteImport } from './routes/verify.$token'
+import { Route as VerificationsIdRouteImport } from './routes/verifications.$id'
 
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const VerificationsIndexRoute = VerificationsIndexRouteImport.update({
+  id: '/verifications/',
+  path: '/verifications/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VerifyTokenRoute = VerifyTokenRouteImport.update({
+  id: '/verify/$token',
+  path: '/verify/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VerificationsIdRoute = VerificationsIdRouteImport.update({
+  id: '/verifications/$id',
+  path: '/verifications/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRoute
+  '/verifications/$id': typeof VerificationsIdRoute
+  '/verify/$token': typeof VerifyTokenRoute
+  '/verifications/': typeof VerificationsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRoute
+  '/verifications/$id': typeof VerificationsIdRoute
+  '/verify/$token': typeof VerifyTokenRoute
+  '/verifications': typeof VerificationsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRoute
+  '/verifications/$id': typeof VerificationsIdRoute
+  '/verify/$token': typeof VerifyTokenRoute
+  '/verifications/': typeof VerificationsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/dashboard'
+    | '/verifications/$id'
+    | '/verify/$token'
+    | '/verifications/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/dashboard'
+    | '/verifications/$id'
+    | '/verify/$token'
+    | '/verifications'
+  id:
+    | '__root__'
+    | '/'
+    | '/dashboard'
+    | '/verifications/$id'
+    | '/verify/$token'
+    | '/verifications/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DashboardRoute: typeof DashboardRoute
+  VerificationsIdRoute: typeof VerificationsIdRoute
+  VerifyTokenRoute: typeof VerifyTokenRoute
+  VerificationsIndexRoute: typeof VerificationsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,21 +111,37 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/verifications/': {
+      id: '/verifications/'
+      path: '/verifications'
+      fullPath: '/verifications/'
+      preLoaderRoute: typeof VerificationsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/verify/$token': {
+      id: '/verify/$token'
+      path: '/verify/$token'
+      fullPath: '/verify/$token'
+      preLoaderRoute: typeof VerifyTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/verifications/$id': {
+      id: '/verifications/$id'
+      path: '/verifications/$id'
+      fullPath: '/verifications/$id'
+      preLoaderRoute: typeof VerificationsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DashboardRoute: DashboardRoute,
+  VerificationsIdRoute: VerificationsIdRoute,
+  VerifyTokenRoute: VerifyTokenRoute,
+  VerificationsIndexRoute: VerificationsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
-}
