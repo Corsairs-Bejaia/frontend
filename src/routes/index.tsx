@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { ShieldCheck, ArrowRight, Cpu, Eye, FileSearch, Zap, Lock, Activity } from "lucide-react";
+import logo from "@/assets/logo.svg";
 
 export const Route = createFileRoute("/")({
   component: Landing,
@@ -19,9 +20,7 @@ function Landing() {
       <nav className="sticky top-0 z-50 border-b border-border/60 bg-background/70 backdrop-blur-xl">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
           <Link to="/" className="flex items-center gap-2.5">
-            <div className="grid place-items-center h-8 w-8 rounded-lg bg-primary/15 ring-1 ring-primary/30">
-              <ShieldCheck className="h-4 w-4 text-primary-glow" />
-            </div>
+            <img src={logo} alt="Meayar Logo" className="h-8 w-8 object-contain" />
             <span className="font-display text-base font-semibold">Meayar</span>
           </Link>
           <div className="hidden md:flex items-center gap-8 text-sm text-muted-foreground">

@@ -12,6 +12,7 @@ import {
   Webhook,
 } from "lucide-react";
 import { listReports } from "@/lib/api/verifications";
+import logo from "@/assets/logo.svg";
 
 const baseItems = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -55,10 +56,7 @@ export function AppSidebar() {
   return (
     <aside className="hidden md:flex w-64 shrink-0 flex-col border-r border-border bg-sidebar/60 backdrop-blur-xl">
       <div className="flex items-center gap-2.5 px-5 h-16 border-b border-border">
-        <div className="relative grid place-items-center h-8 w-8 rounded-lg bg-primary/15 ring-1 ring-primary/30">
-          <ShieldCheck className="h-4 w-4 text-primary-glow" />
-          <span className="absolute -right-0.5 -top-0.5 h-2 w-2 rounded-full bg-success animate-pulse-dot" />
-        </div>
+        <img src={logo} alt="Meayar Logo" className="h-8 w-8 object-contain" />
         <div className="flex flex-col leading-tight">
           <span className="font-display text-[15px] font-semibold tracking-tight">Meayar</span>
           <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">v2.4 · live</span>

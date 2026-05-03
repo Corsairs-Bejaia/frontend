@@ -6,6 +6,7 @@ import {
   Camera, Clock, Lock, Sparkles, Loader2, X, FileBadge,
   Award, CreditCard, Briefcase,
 } from "lucide-react";
+import logo from "@/assets/logo.svg";
 
 export const Route = createFileRoute("/verify/$token")({
   component: Wizard,
@@ -36,9 +37,7 @@ function Wizard() {
       <header className="sticky top-0 z-30 border-b border-border/60 bg-background/80 backdrop-blur-xl">
         <div className="mx-auto max-w-3xl flex items-center justify-between h-16 px-6">
           <Link to="/" className="flex items-center gap-2.5">
-            <div className="grid place-items-center h-8 w-8 rounded-lg bg-primary/15 ring-1 ring-primary/30">
-              <ShieldCheck className="h-4 w-4 text-primary-glow" />
-            </div>
+            <img src={logo} alt="Meayar Logo" className="h-8 w-8 object-contain" />
             <span className="font-display text-base font-semibold">Meayar</span>
           </Link>
           <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
@@ -91,9 +90,7 @@ function Wizard() {
                   className="relative mx-auto h-20 w-20 grid place-items-center"
                 >
                   <div className="absolute inset-0 rounded-full bg-primary/20 blur-xl" />
-                  <div className="relative grid place-items-center h-20 w-20 rounded-2xl bg-gradient-to-br from-primary to-primary-glow glow-ring">
-                    <ShieldCheck className="h-9 w-9 text-primary-foreground" />
-                  </div>
+                  <img src={logo} alt="Meayar Logo" className="relative h-20 w-20 object-contain drop-shadow-2xl" />
                 </motion.div>
                 <h1 className="mt-8 font-display text-4xl md:text-5xl font-semibold tracking-tight">
                   Verify your <span className="text-gradient">medical credentials</span>
