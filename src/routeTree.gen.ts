@@ -15,6 +15,7 @@ import { Route as WebhooksIndexRouteImport } from './routes/webhooks.index'
 import { Route as VerificationsIndexRouteImport } from './routes/verifications.index'
 import { Route as TemplatesIndexRouteImport } from './routes/templates.index'
 import { Route as ReviewIndexRouteImport } from './routes/review.index'
+import { Route as ApiKeysIndexRouteImport } from './routes/api-keys.index'
 import { Route as VerifyTokenRouteImport } from './routes/verify.$token'
 import { Route as VerificationsIdRouteImport } from './routes/verifications.$id'
 import { Route as TemplatesIdRouteImport } from './routes/templates.$id'
@@ -49,6 +50,11 @@ const ReviewIndexRoute = ReviewIndexRouteImport.update({
   path: '/review/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiKeysIndexRoute = ApiKeysIndexRouteImport.update({
+  id: '/api-keys/',
+  path: '/api-keys/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const VerifyTokenRoute = VerifyTokenRouteImport.update({
   id: '/verify/$token',
   path: '/verify/$token',
@@ -71,6 +77,7 @@ export interface FileRoutesByFullPath {
   '/templates/$id': typeof TemplatesIdRoute
   '/verifications/$id': typeof VerificationsIdRoute
   '/verify/$token': typeof VerifyTokenRoute
+  '/api-keys/': typeof ApiKeysIndexRoute
   '/review/': typeof ReviewIndexRoute
   '/templates/': typeof TemplatesIndexRoute
   '/verifications/': typeof VerificationsIndexRoute
@@ -82,6 +89,7 @@ export interface FileRoutesByTo {
   '/templates/$id': typeof TemplatesIdRoute
   '/verifications/$id': typeof VerificationsIdRoute
   '/verify/$token': typeof VerifyTokenRoute
+  '/api-keys': typeof ApiKeysIndexRoute
   '/review': typeof ReviewIndexRoute
   '/templates': typeof TemplatesIndexRoute
   '/verifications': typeof VerificationsIndexRoute
@@ -94,6 +102,7 @@ export interface FileRoutesById {
   '/templates/$id': typeof TemplatesIdRoute
   '/verifications/$id': typeof VerificationsIdRoute
   '/verify/$token': typeof VerifyTokenRoute
+  '/api-keys/': typeof ApiKeysIndexRoute
   '/review/': typeof ReviewIndexRoute
   '/templates/': typeof TemplatesIndexRoute
   '/verifications/': typeof VerificationsIndexRoute
@@ -107,6 +116,7 @@ export interface FileRouteTypes {
     | '/templates/$id'
     | '/verifications/$id'
     | '/verify/$token'
+    | '/api-keys/'
     | '/review/'
     | '/templates/'
     | '/verifications/'
@@ -118,6 +128,7 @@ export interface FileRouteTypes {
     | '/templates/$id'
     | '/verifications/$id'
     | '/verify/$token'
+    | '/api-keys'
     | '/review'
     | '/templates'
     | '/verifications'
@@ -129,6 +140,7 @@ export interface FileRouteTypes {
     | '/templates/$id'
     | '/verifications/$id'
     | '/verify/$token'
+    | '/api-keys/'
     | '/review/'
     | '/templates/'
     | '/verifications/'
@@ -141,6 +153,7 @@ export interface RootRouteChildren {
   TemplatesIdRoute: typeof TemplatesIdRoute
   VerificationsIdRoute: typeof VerificationsIdRoute
   VerifyTokenRoute: typeof VerifyTokenRoute
+  ApiKeysIndexRoute: typeof ApiKeysIndexRoute
   ReviewIndexRoute: typeof ReviewIndexRoute
   TemplatesIndexRoute: typeof TemplatesIndexRoute
   VerificationsIndexRoute: typeof VerificationsIndexRoute
@@ -191,6 +204,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ReviewIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api-keys/': {
+      id: '/api-keys/'
+      path: '/api-keys'
+      fullPath: '/api-keys/'
+      preLoaderRoute: typeof ApiKeysIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/verify/$token': {
       id: '/verify/$token'
       path: '/verify/$token'
@@ -221,6 +241,7 @@ const rootRouteChildren: RootRouteChildren = {
   TemplatesIdRoute: TemplatesIdRoute,
   VerificationsIdRoute: VerificationsIdRoute,
   VerifyTokenRoute: VerifyTokenRoute,
+  ApiKeysIndexRoute: ApiKeysIndexRoute,
   ReviewIndexRoute: ReviewIndexRoute,
   TemplatesIndexRoute: TemplatesIndexRoute,
   VerificationsIndexRoute: VerificationsIndexRoute,
