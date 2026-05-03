@@ -60,7 +60,7 @@ export function AppSidebar() {
           <span className="absolute -right-0.5 -top-0.5 h-2 w-2 rounded-full bg-success animate-pulse-dot" />
         </div>
         <div className="flex flex-col leading-tight">
-          <span className="font-display text-[15px] font-semibold tracking-tight">MediVerify</span>
+          <span className="font-display text-[15px] font-semibold tracking-tight">Meayar</span>
           <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">v2.4 · live</span>
         </div>
       </div>

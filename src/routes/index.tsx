@@ -6,7 +6,7 @@ export const Route = createFileRoute("/")({
   component: Landing,
   head: () => ({
     meta: [
-      { title: "MediVerify — AI verification for medical credentials" },
+      { title: "Meayar — AI verification for medical credentials" },
       { name: "description", content: "Verify medical professionals in under 90 seconds. Multi-agent OCR, authenticity checks, CNAS cross-reference and full audit trail." },
     ],
   }),
@@ -22,7 +22,7 @@ function Landing() {
             <div className="grid place-items-center h-8 w-8 rounded-lg bg-primary/15 ring-1 ring-primary/30">
               <ShieldCheck className="h-4 w-4 text-primary-glow" />
             </div>
-            <span className="font-display text-base font-semibold">MediVerify</span>
+            <span className="font-display text-base font-semibold">Meayar</span>
           </Link>
           <div className="hidden md:flex items-center gap-8 text-sm text-muted-foreground">
             <a href="#how" className="hover:text-foreground transition-colors">How it works</a>
@@ -190,7 +190,7 @@ function Landing() {
 
       <footer className="border-t border-border">
         <div className="mx-auto max-w-7xl px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-muted-foreground">
-          <p>© 2026 MediVerify · Hackathon prototype</p>
+          <p>© 2026 Meayar · Hackathon prototype</p>
           <p className="font-mono">Aligned with Law 18-07</p>
         </div>
       </footer>

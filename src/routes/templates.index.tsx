@@ -25,7 +25,7 @@ import {
 
 export const Route = createFileRoute("/templates/")({
   component: TemplatesPage,
-  head: () => ({ meta: [{ title: "Templates — MediVerify" }] }),
+  head: () => ({ meta: [{ title: "Templates — Meayar" }] }),
 });
 
 // ─── Doc type display helpers ─────────────────────────────────────────────────

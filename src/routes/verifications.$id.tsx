@@ -21,7 +21,7 @@ import { listDocumentsByVerification, getDocumentUrl, type Document } from "@/li
 
 export const Route = createFileRoute("/verifications/$id")({
   component: VerificationDetail,
-  head: () => ({ meta: [{ title: "Verification — MediVerify" }] }),
+  head: () => ({ meta: [{ title: "Verification — Meayar" }] }),
 });
 
 // ─── Score helpers ────────────────────────────────────────────────────────────

@@ -36,10 +36,10 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "MediVerify — Medical credentials verification" },
+      { title: "Meayar — Medical credentials verification" },
       { name: "description", content: "AI-powered verification platform for medical professionals. Upload, verify and audit credentials with full agent traceability." },
-      { name: "author", content: "MediVerify" },
-      { property: "og:title", content: "MediVerify — Medical credentials verification" },
+      { name: "author", content: "Meayar" },
+      { property: "og:title", content: "Meayar — Medical credentials verification" },
       { property: "og:description", content: "AI-powered verification platform for medical professionals." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

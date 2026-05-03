@@ -10,7 +10,7 @@ import { listReports, type Report } from "@/lib/api/verifications";
 
 export const Route = createFileRoute("/review/")({
   component: ReviewQueuePage,
-  head: () => ({ meta: [{ title: "Review Queue — MediVerify" }] }),
+  head: () => ({ meta: [{ title: "Review Queue — Meayar" }] }),
 });
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
