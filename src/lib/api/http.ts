@@ -21,7 +21,7 @@ export async function http<T>(
   const timeout = setTimeout(() => controller.abort(), DEFAULT_TIMEOUT)
 
   try {
-    const headers: HeadersInit = {
+    const headers: Record<string, string> = {
       "Content-Type": "application/json",
       ...options.headers,
     }

@@ -14,7 +14,7 @@ const items = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { to: "/verifications", label: "Verifications", icon: ShieldCheck },
   { to: "/review", label: "Review queue", icon: Inbox, badge: 23 },
-  { to: "/documents", label: "Templates", icon: FileText },
+  { to: "/templates", label: "Templates", icon: FileText },
   { to: "/api-keys", label: "API keys", icon: KeyRound },
   { to: "/settings", label: "Settings", icon: Settings },
 ] as const;
@@ -42,7 +42,7 @@ export function AppSidebar() {
           return (
             <Link
               key={item.to}
-              to={item.to}
+              to={item.to as string}
               className="group relative flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors hover:bg-sidebar-accent"
             >
               {active && (

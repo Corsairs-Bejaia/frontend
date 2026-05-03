@@ -12,8 +12,10 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as VerificationsIndexRouteImport } from './routes/verifications.index'
+import { Route as TemplatesIndexRouteImport } from './routes/templates.index'
 import { Route as VerifyTokenRouteImport } from './routes/verify.$token'
 import { Route as VerificationsIdRouteImport } from './routes/verifications.$id'
+import { Route as TemplatesIdRouteImport } from './routes/templates.$id'
 
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
@@ -30,6 +32,11 @@ const VerificationsIndexRoute = VerificationsIndexRouteImport.update({
   path: '/verifications/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TemplatesIndexRoute = TemplatesIndexRouteImport.update({
+  id: '/templates/',
+  path: '/templates/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const VerifyTokenRoute = VerifyTokenRouteImport.update({
   id: '/verify/$token',
   path: '/verify/$token',
@@ -40,27 +47,38 @@ const VerificationsIdRoute = VerificationsIdRouteImport.update({
   path: '/verifications/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TemplatesIdRoute = TemplatesIdRouteImport.update({
+  id: '/templates/$id',
+  path: '/templates/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
+  '/templates/$id': typeof TemplatesIdRoute
   '/verifications/$id': typeof VerificationsIdRoute
   '/verify/$token': typeof VerifyTokenRoute
+  '/templates/': typeof TemplatesIndexRoute
   '/verifications/': typeof VerificationsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
+  '/templates/$id': typeof TemplatesIdRoute
   '/verifications/$id': typeof VerificationsIdRoute
   '/verify/$token': typeof VerifyTokenRoute
+  '/templates': typeof TemplatesIndexRoute
   '/verifications': typeof VerificationsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
+  '/templates/$id': typeof TemplatesIdRoute
   '/verifications/$id': typeof VerificationsIdRoute
   '/verify/$token': typeof VerifyTokenRoute
+  '/templates/': typeof TemplatesIndexRoute
   '/verifications/': typeof VerificationsIndexRoute
 }
 export interface FileRouteTypes {
@@ -68,30 +86,38 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/dashboard'
+    | '/templates/$id'
     | '/verifications/$id'
     | '/verify/$token'
+    | '/templates/'
     | '/verifications/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/dashboard'
+    | '/templates/$id'
     | '/verifications/$id'
     | '/verify/$token'
+    | '/templates'
     | '/verifications'
   id:
     | '__root__'
     | '/'
     | '/dashboard'
+    | '/templates/$id'
     | '/verifications/$id'
     | '/verify/$token'
+    | '/templates/'
     | '/verifications/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardRoute: typeof DashboardRoute
+  TemplatesIdRoute: typeof TemplatesIdRoute
   VerificationsIdRoute: typeof VerificationsIdRoute
   VerifyTokenRoute: typeof VerifyTokenRoute
+  TemplatesIndexRoute: typeof TemplatesIndexRoute
   VerificationsIndexRoute: typeof VerificationsIndexRoute
 }
 
@@ -118,6 +144,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof VerificationsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/templates/': {
+      id: '/templates/'
+      path: '/templates'
+      fullPath: '/templates/'
+      preLoaderRoute: typeof TemplatesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/verify/$token': {
       id: '/verify/$token'
       path: '/verify/$token'
@@ -132,14 +165,23 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof VerificationsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/templates/$id': {
+      id: '/templates/$id'
+      path: '/templates/$id'
+      fullPath: '/templates/$id'
+      preLoaderRoute: typeof TemplatesIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRoute: DashboardRoute,
+  TemplatesIdRoute: TemplatesIdRoute,
   VerificationsIdRoute: VerificationsIdRoute,
   VerifyTokenRoute: VerifyTokenRoute,
+  TemplatesIndexRoute: TemplatesIndexRoute,
   VerificationsIndexRoute: VerificationsIndexRoute,
 }
 export const routeTree = rootRouteImport
