@@ -29,13 +29,14 @@ function Landing() {
             <a href="#trust" className="hover:text-foreground transition-colors">Trust</a>
           </div>
           <div className="flex items-center gap-2">
-            <Link
-              to="/verify/$token"
-              params={{ token: "demo-doc-amina" }}
+            <a
+              href="https://stark-3.gitbook.io/untitled"
+              target="_blank"
+              rel="noopener noreferrer"
               className="hidden sm:inline-flex text-sm text-muted-foreground hover:text-foreground transition-colors px-3 py-1.5"
             >
-              Doctor flow ↗
-            </Link>
+              API Documentation ↗
+            </a>
             <Link
               to="/dashboard"
               className="inline-flex items-center gap-1.5 rounded-md bg-primary px-3.5 py-1.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors glow-ring"
