@@ -15,7 +15,7 @@ import {
 
 export const Route = createFileRoute("/verifications/")({
   component: VerificationsList,
-  head: () => ({ meta: [{ title: "Verifications — MediVerify" }] }),
+  head: () => ({ meta: [{ title: "Verifications — Meayar" }] }),
 });
 
 // ─── UI filter keys ───────────────────────────────────────────────────────────

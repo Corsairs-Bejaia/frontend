@@ -28,7 +28,7 @@ import {
 
 export const Route = createFileRoute("/webhooks/")({
   component: WebhooksPage,
-  head: () => ({ meta: [{ title: "Webhooks — MediVerify" }] }),
+  head: () => ({ meta: [{ title: "Webhooks — Meayar" }] }),
 });
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -533,7 +533,7 @@ function CreateEndpointModal({ open, onOpenChange, onSuccess }: CreateModalProps
             </Label>
             <Input
               id="webhook-url"
-              placeholder="https://your-app.com/webhooks/mediverify"
+              placeholder="https://your-app.com/webhooks/Meayar"
               value={url}
               onChange={(e) => setUrl(e.target.value)}
               className="bg-surface-elevated border-border font-mono text-sm"

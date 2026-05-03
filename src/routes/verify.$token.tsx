@@ -9,7 +9,7 @@ import {
 
 export const Route = createFileRoute("/verify/$token")({
   component: Wizard,
-  head: () => ({ meta: [{ title: "Verify your credentials — MediVerify" }] }),
+  head: () => ({ meta: [{ title: "Verify your credentials — Meayar" }] }),
 });
 
 const steps = ["Welcome", "Identity", "Documents", "Review", "Processing", "Result"] as const;
@@ -39,7 +39,7 @@ function Wizard() {
             <div className="grid place-items-center h-8 w-8 rounded-lg bg-primary/15 ring-1 ring-primary/30">
               <ShieldCheck className="h-4 w-4 text-primary-glow" />
             </div>
-            <span className="font-display text-base font-semibold">MediVerify</span>
+            <span className="font-display text-base font-semibold">Meayar</span>
           </Link>
           <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
             <Lock className="h-3 w-3" />
@@ -125,7 +125,7 @@ function Wizard() {
                     className="mt-0.5 h-4 w-4 rounded border-border bg-surface accent-primary"
                   />
                   <span className="text-muted-foreground">
-                    I consent to MediVerify processing my documents in accordance with <span className="text-foreground underline">Law 18-07</span> on personal data protection.
+                    I consent to Meayar processing my documents in accordance with <span className="text-foreground underline">Law 18-07</span> on personal data protection.
                   </span>
                 </label>
 
@@ -406,7 +406,7 @@ function Result() {
 
         <div className="mt-10">
           <Link to="/" className="text-sm text-muted-foreground hover:text-foreground transition-colors underline">
-            Return to MediVerify
+            Return to Meayar
           </Link>
         </div>
       </div>

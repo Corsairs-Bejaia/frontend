@@ -18,7 +18,7 @@ import { listVerifications, type Verification } from "@/lib/api/verifications";
 
 export const Route = createFileRoute("/dashboard")({
   component: Dashboard,
-  head: () => ({ meta: [{ title: "Dashboard — MediVerify" }] }),
+  head: () => ({ meta: [{ title: "Dashboard — Meayar" }] }),
 });
 
 function Dashboard() {

@@ -8,7 +8,7 @@ import { ApiKeyFormModal } from "@/components/api-keys-form";
 
 export const Route = createFileRoute("/api-keys/")({
   component: ApiKeysPage,
-  head: () => ({ meta: [{ title: "API Keys — MediVerify" }] }),
+  head: () => ({ meta: [{ title: "API Keys — Meayar" }] }),
 });
 
 function ApiKeysPage() {
@@ -24,7 +24,7 @@ function ApiKeysPage() {
     <>
       <AppShell
         title="API Keys"
-        subtitle="Manage authentication tokens for programmatic access to the MediVerify API"
+        subtitle="Manage authentication tokens for programmatic access to the Meayar API"
       >
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3 rounded-xl border border-border bg-surface px-5 py-3 flex-1 mr-4 max-w-sm">

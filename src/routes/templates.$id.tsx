@@ -19,7 +19,7 @@ import {
 
 export const Route = createFileRoute("/templates/$id")({
   component: TemplateDetailPage,
-  head: () => ({ meta: [{ title: "Template — MediVerify" }] }),
+  head: () => ({ meta: [{ title: "Template — Meayar" }] }),
 });
 
 // ─── Doc type labels ──────────────────────────────────────────────────────────
