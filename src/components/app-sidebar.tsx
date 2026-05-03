@@ -1,5 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
 import {
   LayoutDashboard,
   ShieldCheck,
@@ -8,19 +9,48 @@ import {
   Settings,
   Inbox,
   Activity,
+  Webhook,
 } from "lucide-react";
+import { listReports } from "@/lib/api/verifications";
 
-const items = [
+const baseItems = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { to: "/verifications", label: "Verifications", icon: ShieldCheck },
-  { to: "/review", label: "Review queue", icon: Inbox, badge: 23 },
+  { to: "/review", label: "Review queue", icon: Inbox },
   { to: "/templates", label: "Templates", icon: FileText },
   { to: "/api-keys", label: "API keys", icon: KeyRound },
+  { to: "/webhooks", label: "Webhooks", icon: Webhook },
   { to: "/settings", label: "Settings", icon: Settings },
 ] as const;
 
 export function AppSidebar() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const [pendingReviewCount, setPendingReviewCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    let mounted = true;
+    const fetchPending = async () => {
+      try {
+        const res = await listReports(1, 1, "pending_review");
+        if (mounted) setPendingReviewCount(res.data.total);
+      } catch {
+        // silent
+      }
+    };
+    fetchPending();
+    const interval = setInterval(fetchPending, 60000); // Poll every minute
+    return () => {
+      mounted = false;
+      clearInterval(interval);
+    };
+  }, []);
+
+  const items = baseItems.map((item) => {
+    if (item.to === "/review" && pendingReviewCount !== null && pendingReviewCount > 0) {
+      return { ...item, badge: pendingReviewCount };
+    }
+    return item;
+  });
 
   return (
     <aside className="hidden md:flex w-64 shrink-0 flex-col border-r border-border bg-sidebar/60 backdrop-blur-xl">

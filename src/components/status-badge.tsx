@@ -1,6 +1,6 @@
-import type { VerificationStatus } from "@/lib/mock-data";
+export type StatusBadgeType = "approved" | "review" | "rejected" | "processing" | "pending";
 
-const map: Record<VerificationStatus, { label: string; className: string; dot: string }> = {
+const map: Record<StatusBadgeType, { label: string; className: string; dot: string }> = {
   approved: { label: "Approved", className: "bg-success/15 text-success ring-success/30", dot: "bg-success" },
   review: { label: "Review", className: "bg-warning/15 text-warning ring-warning/30", dot: "bg-warning" },
   rejected: { label: "Rejected", className: "bg-destructive/15 text-destructive ring-destructive/30", dot: "bg-destructive" },
@@ -8,8 +8,20 @@ const map: Record<VerificationStatus, { label: string; className: string; dot: s
   pending: { label: "Pending", className: "bg-muted text-muted-foreground ring-border", dot: "bg-muted-foreground" },
 };
 
-export function StatusBadge({ status }: { status: VerificationStatus }) {
-  const s = map[status];
+export function getBadgeStatus(v: { status: string; decision: string | null }): StatusBadgeType {
+  if (v.status === "pending") return "processing";
+  if (v.status === "failed") return "rejected";
+  if (v.status === "completed") {
+    if (v.decision === "approved" || v.decision === "human_approved") return "approved";
+    if (v.decision === "rejected" || v.decision === "human_rejected") return "rejected";
+    if (v.decision === "manual_review") return "review";
+    return "approved"; // fallback
+  }
+  return "pending";
+}
+
+export function StatusBadge({ status }: { status: StatusBadgeType | string }) {
+  const s = map[status as StatusBadgeType] || map["pending"];
   return (
     <span className={`inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 ring-1 ring-inset font-mono text-[10px] uppercase tracking-wider ${s.className}`}>
       <span className={`h-1.5 w-1.5 rounded-full ${s.dot} ${status === "processing" ? "animate-pulse-dot" : ""}`} />

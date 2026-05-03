@@ -1,7 +1,8 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { StatusBadge } from "@/components/status-badge";
+import { StatusBadge, getBadgeStatus } from "@/components/status-badge";
 import { X, CheckCircle, Clock, Award } from "lucide-react";
-import type { Verification } from "@/lib/mock-data";
+import type { Verification } from "@/lib/api/verifications";
+import { Link } from "@tanstack/react-router";
 
 interface DoctorDetailModalProps {
   open: boolean;
@@ -12,12 +13,30 @@ interface DoctorDetailModalProps {
 export function DoctorDetailModal({ open, onOpenChange, doctor }: DoctorDetailModalProps) {
   if (!doctor) return null;
 
-  const initials = doctor.doctorName.replace("Dr. ", "").split(" ").map((s) => s[0]).slice(0, 2).join("");
-  const bgGradient = doctor.status === "approved" 
+  const bgGradient = doctor.status === "completed" 
     ? "from-success/20 to-success/5" 
-    : doctor.status === "review"
+    : doctor.status === "pending"
     ? "from-warning/20 to-warning/5"
     : "from-destructive/20 to-destructive/5";
+
+  const scoreDisplay = doctor.score != null ? Math.round(doctor.score * 100) : "—";
+
+  const formatTime = (isoString: string) => {
+    return new Date(isoString).toLocaleString("en-GB", {
+      day: "numeric", month: "short", year: "numeric",
+      hour: "2-digit", minute: "2-digit",
+    });
+  };
+
+  const calculateProcessingTime = (start: string, end: string | null) => {
+    if (!end) return "Processing...";
+    const diff = new Date(end).getTime() - new Date(start).getTime();
+    const sec = Math.floor(diff / 1000);
+    return `${Math.floor(sec / 60)}m ${String(sec % 60).padStart(2, "0")}s`;
+  };
+
+  const processingTime = calculateProcessingTime(doctor.startedAt, doctor.completedAt);
+  const submittedAt = formatTime(doctor.startedAt);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -25,8 +44,8 @@ export function DoctorDetailModal({ open, onOpenChange, doctor }: DoctorDetailMo
         <DialogHeader className="relative">
           <div className="absolute -inset-6 opacity-40 blur-xl bg-gradient-to-br from-primary/30 to-transparent rounded-2xl" />
           <div className="relative">
-            <DialogTitle className="text-2xl">{doctor.doctorName}</DialogTitle>
-            <DialogDescription className="text-base mt-2">{doctor.specialty}</DialogDescription>
+            <DialogTitle className="text-2xl">Doctor ID: {doctor.doctorId.slice(0, 10)}…</DialogTitle>
+            <DialogDescription className="text-base mt-2">Verification details</DialogDescription>
           </div>
         </DialogHeader>
 
@@ -35,20 +54,20 @@ export function DoctorDetailModal({ open, onOpenChange, doctor }: DoctorDetailMo
           <div className="grid grid-cols-3 gap-4">
             <div className="rounded-lg bg-surface p-4 border border-border">
               <p className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground mb-2">Status</p>
-              <StatusBadge status={doctor.status} />
+              <StatusBadge status={getBadgeStatus(doctor)} />
             </div>
 
             <div className="rounded-lg bg-surface p-4 border border-border">
               <p className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground mb-2">Score</p>
               <div className="flex items-baseline gap-1">
-                <p className="font-display text-3xl font-semibold tabular-nums">{doctor.score}</p>
+                <p className="font-display text-3xl font-semibold tabular-nums">{scoreDisplay}</p>
                 <span className="text-muted-foreground">/100</span>
               </div>
             </div>
 
             <div className="rounded-lg bg-surface p-4 border border-border">
               <p className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground mb-2">Ref</p>
-              <p className="font-mono text-sm text-foreground">{doctor.ref}</p>
+              <p className="font-mono text-sm text-foreground">{doctor.id.slice(0, 12)}…</p>
             </div>
           </div>
 
@@ -59,31 +78,31 @@ export function DoctorDetailModal({ open, onOpenChange, doctor }: DoctorDetailMo
                 <Clock className="h-4 w-4 text-primary-glow" />
                 <p className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">Processing time</p>
               </div>
-              <p className="font-display text-lg font-semibold">{doctor.processingTime}</p>
+              <p className="font-display text-lg font-semibold">{processingTime}</p>
             </div>
 
             <div className="rounded-lg bg-surface p-4 border border-border">
               <div className="flex items-center gap-2 mb-2">
                 <Award className="h-4 w-4 text-success" />
-                <p className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">Submitted</p>
+                <p className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">Started</p>
               </div>
-              <p className="font-display text-lg font-semibold">{doctor.submittedAt}</p>
+              <p className="font-display text-lg font-semibold">{submittedAt}</p>
             </div>
           </div>
 
-          {/* Personal info */}
+          {/* Details */}
           <div className="rounded-lg bg-gradient-to-br border border-border p-6 space-y-4">
-            <h3 className="font-display text-sm font-semibold uppercase tracking-wider text-foreground">Personal Information</h3>
+            <h3 className="font-display text-sm font-semibold uppercase tracking-wider text-foreground">Overview</h3>
             
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div>
-                <p className="text-muted-foreground font-mono text-[10px] uppercase tracking-wider mb-1">National ID</p>
-                <p className="font-mono text-foreground">{doctor.nationalId.slice(0, 8)}···· ···· ····</p>
+                <p className="text-muted-foreground font-mono text-[10px] uppercase tracking-wider mb-1">Doctor ID</p>
+                <p className="font-mono text-foreground">{doctor.doctorId}</p>
               </div>
 
               <div>
-                <p className="text-muted-foreground font-mono text-[10px] uppercase tracking-wider mb-1">Specialty</p>
-                <p className="text-foreground font-medium">{doctor.specialty}</p>
+                <p className="text-muted-foreground font-mono text-[10px] uppercase tracking-wider mb-1">Decision</p>
+                <p className="text-foreground font-medium uppercase text-xs">{doctor.decision || "Pending"}</p>
               </div>
 
               <div>
@@ -92,54 +111,26 @@ export function DoctorDetailModal({ open, onOpenChange, doctor }: DoctorDetailMo
               </div>
 
               <div>
-                <p className="text-muted-foreground font-mono text-[10px] uppercase tracking-wider mb-1">Flags</p>
-                <div className="flex items-center gap-2">
-                  {doctor.flags === 0 ? (
-                    <>
-                      <CheckCircle className="h-4 w-4 text-success" />
-                      <span className="text-foreground font-medium">No flags</span>
-                    </>
-                  ) : (
-                    <span className="text-warning font-medium">{doctor.flags} flag{doctor.flags !== 1 ? "s" : ""}</span>
-                  )}
-                </div>
+                <p className="text-muted-foreground font-mono text-[10px] uppercase tracking-wider mb-1">Tenant ID</p>
+                <p className="font-mono text-foreground">{doctor.tenantId}</p>
               </div>
-            </div>
-          </div>
-
-          {/* Score breakdown */}
-          <div className="rounded-lg bg-surface p-4 border border-border">
-            <h3 className="font-display text-sm font-semibold uppercase tracking-wider text-foreground mb-4">Score Breakdown</h3>
-            <div className="space-y-3">
-              {[
-                { label: "Identity Match", value: 96 },
-                { label: "Document Authenticity", value: 89 },
-                { label: "Credential Verification", value: doctor.score },
-                { label: "Consistency Check", value: 92 },
-              ].map((tier, i) => (
-                <div key={i} className="space-y-1">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="text-muted-foreground">{tier.label}</span>
-                    <span className="font-mono font-semibold text-foreground">{tier.value}</span>
-                  </div>
-                  <div className="h-1.5 rounded-full bg-muted overflow-hidden">
-                    <div
-                      className="h-full rounded-full bg-gradient-to-r from-primary to-primary-glow"
-                      style={{ width: `${tier.value}%` }}
-                    />
-                  </div>
-                </div>
-              ))}
             </div>
           </div>
 
           {/* Actions */}
           <div className="flex items-center gap-2 pt-2">
-            <button className="flex-1 rounded-lg bg-primary text-primary-foreground px-4 py-2.5 font-medium text-sm hover:bg-primary/90 transition-colors">
+            <Link 
+              to="/verifications/$id" 
+              params={{ id: doctor.id }}
+              className="flex-1 rounded-lg bg-primary text-primary-foreground px-4 py-2.5 font-medium text-sm hover:bg-primary/90 transition-colors text-center"
+            >
               View Full Report
-            </button>
-            <button className="flex-1 rounded-lg border border-border bg-surface text-foreground px-4 py-2.5 font-medium text-sm hover:bg-surface-elevated transition-colors">
-              Export Details
+            </Link>
+            <button 
+              onClick={() => onOpenChange(false)}
+              className="flex-1 rounded-lg border border-border bg-surface text-foreground px-4 py-2.5 font-medium text-sm hover:bg-surface-elevated transition-colors"
+            >
+              Close
             </button>
           </div>
         </div>
