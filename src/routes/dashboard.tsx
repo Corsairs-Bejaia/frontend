@@ -105,7 +105,7 @@ function Dashboard() {
     ].filter((d) => d.value > 0);
   }, [stats]);
 
-  const approvalRate = stats?.verifications?.total > 0
+  const approvalRate = stats && stats.verifications && stats.verifications.total > 0
     ? Math.round(((stats.verifications.completed || 0) / stats.verifications.total) * 100)
     : 0;
 
