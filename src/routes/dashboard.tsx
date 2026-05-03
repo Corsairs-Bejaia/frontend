@@ -10,6 +10,7 @@ import { AppShell } from "@/components/app-shell";
 import { StatusBadge, ScoreBar, getBadgeStatus } from "@/components/status-badge";
 import { DoctorDetailModal } from "@/components/doctor-detail-modal";
 import { ApiKeyFormModal } from "@/components/api-keys-form";
+import { ApiKeyCopyModal } from "@/components/api-key-copy-modal";
 import { ApiKeysTable } from "@/components/api-keys-table";
 import { Button } from "@/components/ui/button";
 
@@ -33,6 +34,7 @@ function Dashboard() {
   const [selectedDoctor, setSelectedDoctor] = useState<Verification | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [formModalOpen, setFormModalOpen] = useState(false);
+  const [newRawKey, setNewRawKey] = useState<string | null>(null);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   const fetchDashboardData = async () => {
@@ -85,9 +87,18 @@ function Dashboard() {
     setModalOpen(true);
   };
 
-  const handleApiKeySuccess = () => {
+  const handleApiKeySuccess = (rawKey: string) => {
     setFormModalOpen(false);
+    setTimeout(() => {
+      setNewRawKey(rawKey);
+    }, 150);
     setRefreshTrigger((prev) => prev + 1);
+  };
+
+  const handleCopyModalClose = (open: boolean) => {
+    if (!open) {
+      setNewRawKey(null);
+    }
   };
 
   const approvedDoctors = useMemo(() => {
@@ -391,6 +402,11 @@ function Dashboard() {
           open={formModalOpen}
           onOpenChange={setFormModalOpen}
           onSuccess={handleApiKeySuccess}
+        />
+        <ApiKeyCopyModal
+          open={!!newRawKey}
+          onOpenChange={handleCopyModalClose}
+          rawKey={newRawKey}
         />
       </AppShell>
     </>

@@ -5,6 +5,7 @@ import { AppShell } from "@/components/app-shell";
 import { Button } from "@/components/ui/button";
 import { ApiKeysTable } from "@/components/api-keys-table";
 import { ApiKeyFormModal } from "@/components/api-keys-form";
+import { ApiKeyCopyModal } from "@/components/api-key-copy-modal";
 
 export const Route = createFileRoute("/api-keys/")({
   component: ApiKeysPage,
@@ -13,11 +14,21 @@ export const Route = createFileRoute("/api-keys/")({
 
 function ApiKeysPage() {
   const [formModalOpen, setFormModalOpen] = useState(false);
+  const [newRawKey, setNewRawKey] = useState<string | null>(null);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
 
-  const handleApiKeySuccess = () => {
+  const handleApiKeySuccess = (rawKey: string) => {
     setFormModalOpen(false);
+    setTimeout(() => {
+      setNewRawKey(rawKey);
+    }, 150);
     setRefreshTrigger((prev) => prev + 1);
+  };
+
+  const handleCopyModalClose = (open: boolean) => {
+    if (!open) {
+      setNewRawKey(null);
+    }
   };
 
   return (
@@ -59,6 +70,11 @@ function ApiKeysPage() {
         open={formModalOpen}
         onOpenChange={setFormModalOpen}
         onSuccess={handleApiKeySuccess}
+      />
+      <ApiKeyCopyModal
+        open={!!newRawKey}
+        onOpenChange={handleCopyModalClose}
+        rawKey={newRawKey}
       />
     </>
   );

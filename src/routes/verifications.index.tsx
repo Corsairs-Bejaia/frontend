@@ -111,7 +111,7 @@ function VerificationsList() {
   return (
     <AppShell
       title="Verifications"
-      subtitle={`${total.toLocaleString()} total records`}
+      subtitle={`${(total ?? 0).toLocaleString()} total records`}
     >
       {/* Filter bar */}
       <div className="rounded-xl border border-border bg-surface p-3 flex flex-wrap items-center gap-2">
@@ -307,10 +307,10 @@ function VerificationsList() {
         {/* Pagination */}
         <div className="flex items-center justify-between px-5 py-3 border-t border-border bg-surface/50">
           <p className="text-xs text-muted-foreground">
-            Page <span className="text-foreground font-medium">{page}</span> of{" "}
-            <span className="text-foreground font-medium">{totalPages}</span>
+            Page <span className="text-foreground font-medium">{page ?? 1}</span> of{" "}
+            <span className="text-foreground font-medium">{totalPages ?? 1}</span>
             {" · "}
-            <span className="text-foreground font-medium">{total.toLocaleString()}</span> total
+            <span className="text-foreground font-medium">{(total ?? 0).toLocaleString()}</span> total
           </p>
           <div className="flex items-center gap-1">
             <button

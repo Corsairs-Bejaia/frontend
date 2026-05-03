@@ -10,7 +10,7 @@ import { Copy, Check } from "lucide-react"
 interface ApiKeyFormModalProps {
   open: boolean
   onOpenChange: (open: boolean) => void
-  onSuccess: () => void
+  onSuccess: (rawKey: string) => void
 }
 
 const AVAILABLE_PERMISSIONS = [
@@ -30,8 +30,6 @@ export function ApiKeyFormModal({
   ])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [rawKey, setRawKey] = useState<string | null>(null)
-  const [copied, setCopied] = useState(false)
 
   const handlePermissionChange = (permission: string, checked: boolean) => {
     if (checked) {
@@ -54,7 +52,10 @@ export function ApiKeyFormModal({
       })
 
       if (response.success) {
-        setRawKey(response.data.rawKey)
+        setName("")
+        setRateLimit(100)
+        setPermissions(["verifications:read"])
+        onSuccess(response.data.rawKey)
       }
     } catch (err) {
       const errorMsg =
@@ -63,70 +64,6 @@ export function ApiKeyFormModal({
     } finally {
       setLoading(false)
     }
-  }
-
-  const handleCopy = () => {
-    if (rawKey) {
-      navigator.clipboard.writeText(rawKey)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
-    }
-  }
-
-  const handleClose = () => {
-    if (rawKey) {
-      onSuccess()
-      setRawKey(null)
-      setName("")
-      setRateLimit(100)
-      setPermissions(["verifications:read"])
-      onOpenChange(false)
-    } else {
-      onOpenChange(false)
-    }
-  }
-
-  if (rawKey) {
-    return (
-      <Dialog open={open} onOpenChange={handleClose}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>API Key Created</DialogTitle>
-            <DialogDescription>
-              Copy your API key now. You won't be able to see it again.
-            </DialogDescription>
-          </DialogHeader>
-
-          <div className="space-y-4">
-            <div className="rounded-lg bg-surface border border-border p-4 font-mono text-sm break-all">
-              {rawKey}
-            </div>
-
-            <Button
-              onClick={handleCopy}
-              variant="outline"
-              className="w-full"
-            >
-              {copied ? (
-                <>
-                  <Check className="h-4 w-4 mr-2" />
-                  Copied
-                </>
-              ) : (
-                <>
-                  <Copy className="h-4 w-4 mr-2" />
-                  Copy Key
-                </>
-              )}
-            </Button>
-
-            <Button onClick={handleClose} className="w-full">
-              Done
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
-    )
   }
 
   return (
