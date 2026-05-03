@@ -23,7 +23,15 @@ export async function http<T>(
   try {
     const headers: Record<string, string> = {
       "Content-Type": "application/json",
-      ...options.headers,
+    }
+
+    if (options.headers) {
+      const extra = options.headers instanceof Headers
+        ? Object.fromEntries((options.headers as Headers).entries())
+        : Array.isArray(options.headers)
+          ? Object.fromEntries(options.headers as [string, string][])
+          : options.headers as Record<string, string>;
+      Object.assign(headers, extra);
     }
 
     if (API_TOKEN) {

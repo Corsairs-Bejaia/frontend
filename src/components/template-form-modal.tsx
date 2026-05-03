@@ -54,7 +54,7 @@ const fieldSchema = z.object({
   fieldName: z.string().min(1, "Required"),
   fieldLabelFr: z.string().min(1, "Required"),
   fieldLabelAr: z.string().optional(),
-  fieldType: z.enum(["text", "number", "date", "year", "boolean", "enum", "name_ar", "name_fr"] as const),
+  fieldType: z.enum(["text", "number", "date", "year", "boolean", "enum", "name_ar", "name_fr"] as const).default("text"),
   isRequired: z.boolean().default(true),
   sortOrder: z.number().default(0),
 });
@@ -62,12 +62,13 @@ const fieldSchema = z.object({
 const schema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   slug: z.string().min(1, "Required"),
-  docType: z.enum(["national_id", "diploma", "affiliation", "agreement", "chifa", "ordonnance", "custom"] as const),
+  docType: z.enum(["national_id", "diploma", "affiliation", "agreement", "chifa", "ordonnance", "custom"] as const).default("diploma"),
   description: z.string().optional(),
-  fields: z.array(fieldSchema).optional().transform((v) => v ?? []),
+  fields: z.array(fieldSchema).default([]),
 });
 
-type FormValues = z.infer<typeof schema>;
+type FormInput = z.input<typeof schema>;
+type FormValues = z.output<typeof schema>;
 
 interface Props {
   open: boolean;
@@ -85,7 +86,7 @@ export function TemplateFormModal({ open, onOpenChange, onSuccess, editTemplate 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const { register, handleSubmit, control, setValue, watch, reset, formState: { errors } } = useForm<FormValues>({
+  const { register, handleSubmit, control, setValue, watch, reset, formState: { errors } } = useForm<FormInput, unknown, FormValues>({
     resolver: zodResolver(schema),
     defaultValues: { name: "", slug: "", docType: "diploma", description: "", fields: [] },
   });
